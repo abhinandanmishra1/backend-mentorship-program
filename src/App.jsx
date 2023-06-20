@@ -18,7 +18,7 @@ function App() {
 
     try {
       const { data } = await axios.get(
-        "https://ap-south-1.cosmocloud.io/649000ad97cc104f02b9a31f/api/subscriptions/%3Cemail%3E",
+        `https://ap-south-1.cosmocloud.io/649000ad97cc104f02b9a31f/api/subscriptions/${email}`,
         {
           params: {},
         }
@@ -43,7 +43,10 @@ function App() {
               placeholder="Enter your email"
               className="input"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setInputError("");
+              }}
               ref={ref}
             />
             <button className="button" type="button" onClick={onSubmit}>
@@ -55,11 +58,20 @@ function App() {
       </div>
       {data && (
         <>
-          <div>{showRazorPay && data[0].razorpay}</div>
-          <div className="notification">
-            {!showRazorPay &&
-              "You have not registered or added wrong email. Please check"}
-          </div>
+          {showRazorPay && (
+            <div>
+              Your Payment Link :{" "}
+              <a href={data[0].rzpLink} target="_blank" rel="noreferrer">
+                {data[0].rzpLink}
+              </a>
+            </div>
+          )}
+
+          {!showRazorPay && (
+            <div className="notification">
+              You have not registered or added wrong email. Please check
+            </div>
+          )}
         </>
       )}
     </div>
